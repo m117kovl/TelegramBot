@@ -17,11 +17,11 @@ namespace Telegram_Bot
         {
             client = new TelegramBotClient(Token);
 
-            client.StartReceiving();
-            client.OnMessage += OnMessageHandler;
+            client.StartReceiving(); //начать прослушка
+            client.OnMessage += OnMessageHandler; //если пришло сообщение, то иди в метод OnMessageHandler
 
-            Console.ReadLine();
-            client.StopReceiving();
+            Console.ReadLine(); //не закрыввать бота, пока нет сообщения в консоли
+            client.StopReceiving(); //завершить прослушку
         }
 
         private static async void OnMessageHandler(object sender, MessageEventArgs e)
@@ -35,20 +35,22 @@ namespace Telegram_Bot
 
             if (msg.Text != null)
             {
-                Console.WriteLine($"Пришло сообщение с текстом: {msg.Text}");
+                Console.WriteLine("Пришло сообщение с текстом: " + msg.Text);
+
                 switch (msg.Text)
                 {
                     case "Стикер":
                         await client.SendStickerAsync(
                             chatId: msg.Chat.Id,
                             sticker: stic[a],
-                            replyToMessageId: msg.MessageId,
-                            replyMarkup: GetButtons());
+                            replyToMessageId: msg.MessageId, //сделать как ответ на сообщение
+                            replyMarkup: GetButtons()); //после отправки сообщения показать кнопочки
                         break;
                     case "Картинка":
                         await client.SendPhotoAsync(
                             chatId: msg.Chat.Id,
                             photo: pho[a],
+                            replyToMessageId: msg.MessageId,
                             replyMarkup: GetButtons());
                         break;
 
